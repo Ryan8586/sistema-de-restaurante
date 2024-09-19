@@ -1,0 +1,51 @@
+-- Criar o banco de dados
+CREATE DATABASE restaurante;
+
+-- Usar o banco de dados
+USE restaurante;
+
+-- Criar tabela de clientes
+CREATE TABLE clientes (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    nome VARCHAR(100) NOT NULL,
+    telefone VARCHAR(15),
+    email VARCHAR(100)
+);
+
+-- Criar tabela de funcionários
+CREATE TABLE funcionarios (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    nome VARCHAR(100) NOT NULL,
+    cargo VARCHAR(50) NOT NULL,
+    salario DECIMAL(10, 2) NOT NULL
+);
+
+-- Criar tabela de pratos
+CREATE TABLE pratos (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    nome VARCHAR(100) NOT NULL,
+    descricao TEXT,
+    preco DECIMAL(10, 2) NOT NULL,
+    disponivel BOOLEAN DEFAULT TRUE
+);
+
+-- Criar tabela de pedidos
+CREATE TABLE pedidos (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    cliente_id INT,
+    funcionario_id INT,
+    data_pedido DATETIME DEFAULT CURRENT_TIMESTAMP,
+    status ENUM('Pendente', 'Em preparação', 'Concluído', 'Cancelado') DEFAULT 'Pendente',
+    FOREIGN KEY (cliente_id) REFERENCES clientes(id),
+    FOREIGN KEY (funcionario_id) REFERENCES funcionarios(id)
+);
+
+-- Criar tabela de itens do pedido
+CREATE TABLE itens_pedido (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    pedido_id INT,
+    prato_id INT,
+    quantidade INT DEFAULT 1,
+    FOREIGN KEY (pedido_id) REFERENCES pedidos(id),
+    FOREIGN KEY (prato_id) REFERENCES pratos(id)
+);
